@@ -30,13 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is OverSpeed) {
             screenColor = Colors.red;
           }
-          return Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: 10,
-            ),
-            child: Container(
-              color: screenColor,
+          return Container(
+            color: screenColor,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 10,
+              ),
               child: StreamBuilder<Position>(
                 stream: Geolocator.getPositionStream(
                   locationSettings: locationSettings,
