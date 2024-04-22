@@ -6,7 +6,7 @@ import 'speed_state.dart';
 class SpeedBloc extends Bloc<ChangeSpeed, SpeedState> {
   SpeedBloc() : super(SpeedInitial()) {
     on<ChangeSpeed>((event, emit) {
-      if (event.speed > 0.4) {
+      if (event.speed > 30) {
         emit(OverSpeed(event.speed));
       } else {
         emit(CorrectSpeed(event.speed));
