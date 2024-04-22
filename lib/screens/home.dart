@@ -18,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
     distanceFilter: 0,
   );
 
-  final speedBloc = SpeedBloc();
+  final SpeedBloc speedBloc = SpeedBloc();
+  bool isDialogOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
         bloc: speedBloc,
         builder: (context, state) {
           Color screenColor = Colors.white;
-          if (state is OverSpeed) {
+          if (state is OverSpeed && !isDialogOpen) {
             screenColor = Colors.red;
+            // Show the alert dialog
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _showAlertDialog(context);
+            });
           }
           return Container(
             color: screenColor,
@@ -63,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Center(
                     child: Text(
                       "${speedInKmh.toStringAsFixed(2)} km/h",
-                      style: const TextStyle(fontSize: 36),
+                      style: const TextStyle(
+                        fontSize: 54,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Orbitron',
+                      ),
                     ),
                   );
                 },
@@ -72,6 +81,29 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    isDialogOpen = true;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Slow down"),
+          content:
+              const Text("You are over the speed limit. Please slow down."),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                isDialogOpen = false;
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
